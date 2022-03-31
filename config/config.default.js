@@ -12,13 +12,38 @@ module.exports = appInfo => {
    **/
   const config = exports = {};
 
-  // use for cookie sign key, should change to your own and keep security
+  // Cookie签名密钥
   config.keys = appInfo.name + '_1648541621422_1824';
 
-  // add your middleware config here
+  // 中间件配置
   config.middleware = [];
 
-  // add your user config here
+  // 跨域访问
+  config.cors = {
+    origin:'*',
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  };
+  config.security = {
+    csrf: {
+      enable: false,
+      ignoreJSON: true
+    },
+    domainWhiteList: ['*'] // []中放放出的白名单，*代表所有
+  };
+
+  // 数据库集成
+  config.mysql = {
+    client: {
+      host: 'localhost',
+      port: '3306',
+      user: 'root',
+      password: 'root',
+      database: 'user_auth_db',    
+    },
+    app: true,
+    agent: false,
+  };
+
   const userConfig = {
     // myAppName: 'egg',
   };
