@@ -1,12 +1,11 @@
 ## 快速初始化项目
 > npm init egg --type=simple
-> npm i
-> npm run dev
-> open http://localhost:7001
 
-## 框架能力
-- 基础服务  `eggjs`
-- 数据库  `egg-mysql`
+> npm i
+
+> npm run dev
+
+> open http://localhost:7001
 
 ## 解决跨域问题
 1. 安装 egg-cors
@@ -37,23 +36,6 @@ config.cors = {
 };
 ```
 
-## 接口返回格式制定
-```
-/* 成功 */
-const res = {
-  type: 'success',
-  result: {
-    token: 'xxx123-xxxfxstasdawafgdfsf'
-  }
-}
-
-/* 失败 */
-const err = {
-  type: 'error',
-  msg: '注册用户已存在'
-}
-```
-
 ## egg接收请求参数
 1、get请求
 ```
@@ -73,5 +55,38 @@ this.ctx.body = {
   code: 0,
   data: '返回的数据',
   msg: '错误数据'
+}
+```
+
+## egg-mysql 常规方法
+```
+<!-- 查找 -->
+let result = await this.app.mysql.get("user",{id:1})
+<!-- 查找  -->
+let result = await this.app.mysql.select("user",{ where:{id:1}
+
+<!-- 增加 -->
+let result = await this.app.mysql.insert("user",{username:"lisi",password:"1234"})
+
+<!-- 修改 通过主键-->
+let result = await this.app.mysql.update('user',{ id:2, username:'赵四' });
+<!-- 修改 通过sql -->
+let results=await this.app.mysql.query('update user set username = ? where id = ?',["王五",2]);
+
+<!-- 删除 -->
+let result= await this.app.mysql.delete('user',{ id:3 });
+
+<!-- 执行sql -->
+this.app.mysql.query(sql,values);
+
+<!-- mysql事务 -->
+const conn=await this.app.mysql.beginTransaction();
+try{
+    await conn.insert('user',{'username':'xiao1','password':'1111'});
+    await conn.update('user',{id:2,username:'黑子'});
+    await conn.commit();  //提交事务
+}catch(err){
+    await conn.rollback();//回滚事务
+    throw err;
 }
 ```

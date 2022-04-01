@@ -15,20 +15,19 @@ class UserController extends Controller {
   // 注册接口
   async register() {
     const payload = this.ctx.request.body;
-    if(!payload.username || !payload.password){
+    try{
+      await this.app.mysql.insert(
+        'user_table', {
+          username: payload.username,
+          password: payload.password
+        }
+      );
+    }catch(e){
       this.ctx.body = {
         type:'error',
         msg: '请输入用户名或密码'
-      };
-    }
-    let insertResult = await this.app.mysql.insert(
-      'user_table', {
-        username: payload.username,
-        password: payload.password
       }
-    );
-    console.log('insertResult',insertResult)
-
+    }
     this.ctx.body = result;
   }
 }
